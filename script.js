@@ -1,155 +1,175 @@
 // --- Variabel State ---
-let currentOperand = '0';
-let previousOperand = '';
-let operation = undefined;
+let expression = ''; 
 let memory = 0;
 let historyLog = [];
+let shouldResetScreen = false; // Penanda jika user baru saja menekan tombol =
 
 // --- Elemen DOM ---
 const currentOperandTextElement = document.getElementById('current-operand');
 const previousOperandTextElement = document.getElementById('previous-operand');
 const historyListElement = document.getElementById('history-list');
 
+// --- Helper: Cek apakah karakter adalah operator ---
+const isOperator = (char) => ['+', '-', '×', '÷'].includes(char);
+
 // --- Fungsi Logika Utama ---
 
-// Menambahkan angka ke layar
 function appendNumber(number) {
-    if (number === '.' && currentOperand.includes('.')) return;
-    if (currentOperand === '0' && number !== '.') {
-        currentOperand = number.toString();
-    } else {
-        currentOperand = currentOperand.toString() + number.toString();
+    // Jika baru selesai hitung (=), angka baru akan mereset layar
+    if (shouldResetScreen) {
+        expression = '';
+        shouldResetScreen = false;
     }
+
+    // Mencegah 0 di awal ganda (Contoh: input 0, lalu 0 lagi -> tetap 0)
+    // Kita ambil angka terakhir dari ekspresi
+    const tokens = expression.split(/[\+\-\×\÷]/); 
+    const currentNum = tokens[tokens.length - 1];
+
+    if (number === '0' && currentNum === '0') return; // Cegah "00"
+    if (number === '.' && currentNum.includes('.')) return; // Cegah ".."
+
+    // Jika angka saat ini hanya "0" dan user ketik angka lain (misal 5), ganti 0 jadi 5
+    if (currentNum === '0' && number !== '.') {
+        expression = expression.slice(0, -1) + number;
+    } else {
+        expression += number;
+    }
+    
     updateDisplay();
 }
 
-// Memilih operator (+, -, x, /)
 function chooseOperation(op) {
-    if (currentOperand === '') return;
-    if (previousOperand !== '') {
-        compute();
+    shouldResetScreen = false; // Jangan reset jika user lanjut menghitung hasil sebelumnya
+    if (expression === '') return;
+
+    const lastChar = expression.slice(-1);
+    
+    // Jika karakter terakhir adalah operator, ganti dengan yang baru
+    if (isOperator(lastChar)) {
+        expression = expression.slice(0, -1) + op;
+    } else {
+        expression += op;
     }
-    operation = op;
-    previousOperand = currentOperand;
-    currentOperand = '';
     updateDisplay();
 }
 
-// Melakukan Perhitungan
 function compute() {
-    let computation;
-    const prev = parseFloat(previousOperand);
-    const current = parseFloat(currentOperand);
+    if (expression === '' || isOperator(expression.slice(-1))) return;
 
-    if (isNaN(prev) || isNaN(current)) return;
-
-    switch (operation) {
-        case '+':
-            computation = prev + current;
-            break;
-        case '-':
-            computation = prev - current;
-            break;
-        case '×':
-            computation = prev * current;
-            break;
-        case '÷':
-            if (current === 0) {
-                alert("Error: Tidak bisa membagi dengan nol!");
-                clearAll();
-                return;
-            }
-            computation = prev / current;
-            break;
-        default:
-            return;
+    // Cek pembagian nol
+    if (expression.includes('÷0')) {
+        alert("Tidak bisa membagi dengan nol!");
+        expression = '';
+        updateDisplay();
+        return;
     }
 
-    // Simpan ke History sebelum reset state
-    addToHistory(`${prev} ${operation} ${current}`, computation);
+    try {
+        const jsExpression = expression.replace(/×/g, '*').replace(/÷/g, '/');
+        // Evaluasi matematika
+        const result = new Function('return ' + jsExpression)();
+        
+        // Pembulatan desimal maks 8 digit agar rapi
+        const formattedResult = Math.round(result * 100000000) / 100000000;
 
-    currentOperand = computation;
-    operation = undefined;
-    previousOperand = '';
-    updateDisplay();
-}
-
-// Update tampilan layar
-function updateDisplay() {
-    currentOperandTextElement.innerText = getDisplayNumber(currentOperand);
-    if (operation != null) {
-        previousOperandTextElement.innerText = 
-            `${getDisplayNumber(previousOperand)} ${operation}`;
-    } else {
+        addToHistory(expression, formattedResult);
+        
+        expression = formattedResult.toString();
+        shouldResetScreen = true; // Set flag agar input angka berikutnya mereset layar
+        updateDisplay();
         previousOperandTextElement.innerText = '';
+    } catch (error) {
+        expression = 'Error';
     }
 }
 
-// Format angka (memberikan koma untuk ribuan)
-function getDisplayNumber(number) {
-    const stringNumber = number.toString();
-    const integerDigits = parseFloat(stringNumber.split('.')[0]);
-    const decimalDigits = stringNumber.split('.')[1];
-    let integerDisplay;
-    
-    if (isNaN(integerDigits)) {
-        integerDisplay = '';
-    } else {
-        integerDisplay = integerDigits.toLocaleString('id-ID', { maximumFractionDigits: 0 });
-    }
-    
-    if (decimalDigits != null) {
-        return `${integerDisplay}.${decimalDigits}`;
-    } else {
-        return integerDisplay;
-    }
+function updateDisplay() {
+    currentOperandTextElement.innerText = expression || '0';
 }
 
-// --- Fungsi Clear & Delete ---
+// --- Fungsi Clear ---
 
 function clearAll() {
-    currentOperand = '0';
-    previousOperand = '';
-    operation = undefined;
+    expression = '';
+    shouldResetScreen = false;
     updateDisplay();
 }
 
 function clearEntry() {
-    currentOperand = '0';
+    if (shouldResetScreen) {
+        clearAll();
+        return;
+    }
+    expression = expression.toString().slice(0, -1);
     updateDisplay();
 }
 
-// --- Fungsi Memory (Advanced) ---
+// --- Fungsi Memory (Fixed) ---
 
 function memoryPlus() {
-    memory += parseFloat(currentOperand) || 0;
-    alert(`Memory: ${memory} (Added)`);
+    // Hitung nilai di layar saat ini dulu sebelum dimasukkan ke memori
+    try {
+        const tempExp = expression.replace(/×/g, '*').replace(/÷/g, '/');
+        const val = new Function('return ' + tempExp)();
+        if (!isNaN(val)) {
+            memory += val;
+            shouldResetScreen = true; // Agar user bisa langsung input angka baru
+            alert(`Memory Ditambah. Total Memory: ${memory}`);
+        }
+    } catch(e) {}
 }
 
 function memoryMinus() {
-    memory -= parseFloat(currentOperand) || 0;
-    alert(`Memory: ${memory} (Subtracted)`);
+    try {
+        const tempExp = expression.replace(/×/g, '*').replace(/÷/g, '/');
+        const val = new Function('return ' + tempExp)();
+        if (!isNaN(val)) {
+            memory -= val;
+            shouldResetScreen = true;
+            alert(`Memory Dikurang. Total Memory: ${memory}`);
+        }
+    } catch(e) {}
 }
 
 function memoryRecall() {
-    currentOperand = memory.toString();
+    // Logika Pintar: 
+    // 1. Jika layar kosong, masukkan memory.
+    // 2. Jika karakter terakhir adalah operator (+, -, x), masukkan memory.
+    // 3. Jika karakter terakhir adalah angka, hapus angka itu (replace) atau abaikan?
+    //    Solusi User: User ingin MR menampilkan angka memory murni.
+    
+    const lastChar = expression.slice(-1);
+    if (expression === '' || isOperator(lastChar)) {
+        expression += memory.toString();
+    } else if (shouldResetScreen) {
+        expression = memory.toString();
+        shouldResetScreen = false;
+    } else {
+        // Jika user menekan MR saat ada angka (misal "70"), kita asumsikan dikali? 
+        // Atau untuk keamanan, kita replace angka terakhir dengan nilai memory
+        // Agar tidak terjadi "700" (70+0)
+        
+        // Cari batas angka terakhir
+        const tokens = expression.split(/[\+\-\×\÷]/);
+        const currentNumLen = tokens[tokens.length - 1].length;
+        
+        // Hapus angka yang sedang diketik, ganti dengan memory
+        expression = expression.slice(0, -currentNumLen) + memory.toString();
+    }
     updateDisplay();
 }
 
 function memoryClear() {
     memory = 0;
-    alert("Memory Cleared");
+    alert("Memory Direset (0)");
 }
 
-// --- Fungsi History (Advanced) ---
+// --- History ---
 
-function addToHistory(expression, result) {
-    const historyItem = { expression, result };
-    historyLog.unshift(historyItem); // Tambah ke awal array
-    
-    if (historyLog.length > 5) {
-        historyLog.pop(); // Hapus item terlama jika lebih dari 5
-    }
+function addToHistory(exp, res) {
+    historyLog.unshift({ expression: exp, result: res });
+    if (historyLog.length > 5) historyLog.pop();
     renderHistory();
 }
 
@@ -157,7 +177,7 @@ function renderHistory() {
     historyListElement.innerHTML = '';
     historyLog.forEach(item => {
         const li = document.createElement('li');
-        li.innerHTML = `${item.expression} = <span>${getDisplayNumber(item.result)}</span>`;
+        li.innerHTML = `${item.expression} = <span>${item.result}</span>`;
         historyListElement.appendChild(li);
     });
 }
@@ -167,29 +187,15 @@ function clearHistory() {
     renderHistory();
 }
 
-// --- Keyboard Support ---
-
+// --- Keyboard ---
 document.addEventListener('keydown', (event) => {
-    if ((event.key >= 0 && event.key <= 9) || event.key === '.') {
-        appendNumber(event.key);
-    }
-    if (event.key === 'Enter' || event.key === '=') {
-        event.preventDefault(); // Mencegah submit form jika ada
-        compute();
-    }
-    if (event.key === 'Backspace') {
-        // Simulasi delete karakter terakhir (opsional, saat ini CE membersihkan entry)
-        currentOperand = currentOperand.toString().slice(0, -1);
-        if(currentOperand === '') currentOperand = '0';
-        updateDisplay();
-    }
-    if (event.key === 'Escape') {
-        clearAll();
-    }
-    if (event.key === '+' || event.key === '-' || event.key === '*' || event.key === '/') {
-        let keyOp = event.key;
-        if (keyOp === '/') keyOp = '÷';
-        if (keyOp === '*') keyOp = '×';
-        chooseOperation(keyOp);
+    const key = event.key;
+    if ((key >= 0 && key <= 9) || key === '.') appendNumber(key);
+    if (key === 'Enter' || key === '=') { event.preventDefault(); compute(); }
+    if (key === 'Backspace') clearEntry();
+    if (key === 'Escape') clearAll();
+    if (['+', '-', '*', '/'].includes(key)) {
+        let op = key === '/' ? '÷' : (key === '*' ? '×' : key);
+        chooseOperation(op);
     }
 });
