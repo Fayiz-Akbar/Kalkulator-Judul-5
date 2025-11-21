@@ -15,14 +15,14 @@
                 <div id="current-operand" class="current-operand">0</div>
             </div>
 
-            <button class="btn-memory" onclick="memoryClear()">MC</button>
-            <button class="btn-memory" onclick="memoryRecall()">MR</button>
-            <button class="btn-memory" onclick="memoryMinus()">M-</button>
-            <button class="btn-memory" onclick="memoryPlus()">M+</button>
+             <button class="btn-memory" onclick="memoryClear()">MC</button>
+             <button class="btn-memory" onclick="memoryRecall()">MR</button>
+             <button class="btn-memory" onclick="memoryMinus()">M-</button>
+             <button class="btn-memory" onclick="memoryPlus()">M+</button>
 
-            <button class="span-two" onclick="clearEntry()">CE</button>
-            <button class="span-two" onclick="clearAll()">C</button>
-            
+             <button class="span-two btn-clear" onclick="clearEntry()">CE</button>
+             <button class="span-two btn-clear" onclick="clearAll()">C</button>
+    
             <button onclick="appendNumber('7')">7</button>
             <button onclick="appendNumber('8')">8</button>
             <button onclick="appendNumber('9')">9</button>
@@ -37,11 +37,11 @@
             <button onclick="appendNumber('2')">2</button>
             <button onclick="appendNumber('3')">3</button>
             <button class="btn-op" onclick="chooseOperation('-')">-</button>
-
+ 
             <button onclick="appendNumber('.')">.</button>
             <button onclick="appendNumber('0')">0</button>
-            <button class="span-two btn-equal" onclick="compute()">=</button>
             <button class="btn-op" onclick="chooseOperation('+')">+</button>
+            <button class="btn-equal" onclick="compute()">=</button>
         </div>
 
         <div class="history-panel">
