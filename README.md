@@ -38,6 +38,8 @@ Berbeda dengan kalkulator sederhana biasa, aplikasi ini menggunakan logika **Exp
 * **Keyboard Support:** Mendukung input langsung dari keyboard fisik (Numpad, Enter untuk hasil, Backspace untuk hapus, Esc untuk reset).
 * **Error Handling:** Mendeteksi dan mencegah pembagian dengan nol (menampilkan peringatan tanpa merusak aplikasi).
 
+---
+
 ### **Tampilan UI Beserta Fitur**
 
 **Tampilan Utama**
@@ -47,14 +49,18 @@ Berbeda dengan kalkulator sederhana biasa, aplikasi ini menggunakan logika **Exp
 **Tidak Bisaa Dibagi 0**
 <img width="1899" height="919" alt="image" src="https://github.com/user-attachments/assets/d2d4344b-7462-4621-8b14-5b04ab4c13e0" />
 
+
 **Memory Dikurang**
 <img width="1893" height="916" alt="image" src="https://github.com/user-attachments/assets/24533380-be18-4ff2-99d6-cdede7cdec4f" />
+
 
 **Memmory Ditambah**
 <img width="1888" height="918" alt="image" src="https://github.com/user-attachments/assets/429cba68-927b-4d2e-8022-9859ec7e992f" />
 
+
 **Memory Direset**
 <img width="1858" height="922" alt="image" src="https://github.com/user-attachments/assets/b3ec2fec-c648-43d8-9822-cb3714e66384" />
+
 
 **Tampilan HP Responsive**
 
