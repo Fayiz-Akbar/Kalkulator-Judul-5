@@ -1,6 +1,3 @@
-/* =========================================
-   1. RESET & GLOBAL STYLES
-   ========================================= */
 *, *::before, *::after {
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -9,19 +6,15 @@
 body {
     margin: 0;
     padding: 0;
-    background: #eef2f5; /* Background abu muda yang bersih */
+    background: #eef2f5;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
 
-/* =========================================
-   2. CONTAINER UTAMA
-   ========================================= */
 .container {
     display: flex;
-    /* align-items: stretch membuat tinggi kalkulator & history SAMA RATA */
     align-items: stretch; 
     background: white;
     border-radius: 20px;
@@ -30,29 +23,23 @@ body {
     max-width: 900px;
 }
 
-/* =========================================
-   3. BAGIAN KALKULATOR (KIRI)
-   ========================================= */
 .calculator {
     padding: 25px;
     background-color: #fff;
     display: grid;
-    /* Grid 4 Kolom */
     grid-template-columns: repeat(4, 70px);
-    /* Baris 1 (Layar) + 6 Baris Tombol */
     grid-template-rows: minmax(120px, auto) repeat(6, 65px); 
     gap: 12px;
 }
 
-/* --- Layar Display --- */
 .display-screen {
-    grid-column: 1 / -1; /* Span sepanjang 4 kolom */
-    background-color: #2d3436; /* Dark Grey */
+    grid-column: 1 / -1; 
+    background-color: #2d3436; 
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; /* Isi dari bawah */
-    align-items: flex-end;     /* Rata kanan */
+    justify-content: flex-end; 
+    align-items: flex-end;     
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 10px;
@@ -74,9 +61,6 @@ body {
     line-height: 1.1;
 }
 
-/* =========================================
-   4. STYLING TOMBOL
-   ========================================= */
 button {
     cursor: pointer;
     font-size: 1.25rem;
@@ -85,64 +69,68 @@ button {
     outline: none;
     border-radius: 12px;
     transition: transform 0.1s ease, background-color 0.2s;
-    box-shadow: 0 4px #dfe6e9; /* Efek 3D halus */
+    box-shadow: 0 4px #dfe6e9; 
 }
 
 button:active {
-    transform: translateY(3px); /* Efek tekan */
+    transform: translateY(3px); 
     box-shadow: none;
 }
 
-/* -- Warna Tombol Angka (Default) -- */
 button {
     background-color: #f1f2f6;
     color: #2d3436;
 }
+
 button:hover {
     background-color: #dfe6e9;
 }
 
-/* -- Tombol Operator (Biru) -- */
 .btn-op {
     background-color: #0984e3;
     color: white;
     box-shadow: 0 4px #0652dd;
 }
-.btn-op:hover { background-color: #74b9ff; }
 
-/* -- Tombol Equal (Hijau) -- */
+.btn-op:hover { 
+    background-color: #74b9ff; 
+}
+
 .btn-equal {
     background-color: #00b894;
     color: white;
     box-shadow: 0 4px #00a884;
 }
-.btn-equal:hover { background-color: #55efc4; }
 
-/* -- Tombol Clear (Merah) -- */
+.btn-equal:hover { 
+    background-color: #55efc4; 
+}
+
 .btn-clear {
     background-color: #ff7675;
     color: white;
     box-shadow: 0 4px #d63031;
 }
-.btn-clear:hover { background-color: #fab1a0; }
 
-/* -- Tombol Memory (Abu Gelap) -- */
+.btn-clear:hover { 
+    background-color: #fab1a0; 
+}
+
 .btn-memory {
     background-color: #636e72;
     color: white;
     font-size: 1rem;
     box-shadow: 0 4px #2d3436;
 }
-.btn-memory:hover { background-color: #b2bec3; }
 
-/* -- Helper Class -- */
+.btn-memory:hover { 
+    background-color: #b2bec3; 
+}
+
 .span-two {
     grid-column: span 2;
 }
 
-/* =========================================
-   5. BAGIAN HISTORY (KANAN)
-   ========================================= */
 .history-panel {
     width: 280px;
     background-color: #fafafa;
@@ -163,27 +151,34 @@ button:hover {
     letter-spacing: 1px;
 }
 
-/* List Scrollable */
 ul#history-list {
     list-style: none;
     padding: 0;
     margin: 0;
-    flex-grow: 1;      /* Mengisi ruang kosong */
-    overflow-y: auto;  /* Scroll jika penuh */
+    flex-grow: 1;      
+    overflow-y: auto;  
     margin-bottom: 15px;
 }
 
-/* Styling Scrollbar Chrome/Safari */
-ul#history-list::-webkit-scrollbar { width: 6px; }
-ul#history-list::-webkit-scrollbar-track { background: transparent; }
-ul#history-list::-webkit-scrollbar-thumb { background: #b2bec3; border-radius: 10px; }
+ul#history-list::-webkit-scrollbar { 
+    width: 6px; 
+}
+
+ul#history-list::-webkit-scrollbar-track { 
+    background: transparent; 
+}
+
+ul#history-list::-webkit-scrollbar-thumb { 
+    background: #b2bec3; 
+    border-radius: 10px; 
+}
 
 ul#history-list li {
     background: white;
     margin-bottom: 10px;
     padding: 10px 15px;
     border-radius: 8px;
-    border-right: 4px solid #0984e3; /* Aksen biru di kanan */
+    border-right: 4px solid #0984e3; 
     text-align: right;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     font-size: 0.95rem;
@@ -206,14 +201,14 @@ ul#history-list li span {
     color: white;
     box-shadow: 0 4px #d63031;
 }
-#clear-history:hover { background-color: #ff5252; }
 
-/* =========================================
-   6. RESPONSIVE (MOBILE)
-   ========================================= */
+#clear-history:hover { 
+    background-color: #ff5252; 
+}
+
 @media (max-width: 768px) {
     .container {
-        flex-direction: column; /* Tumpuk vertikal */
+        flex-direction: column; 
         width: 100%;
         height: 100vh;
         border-radius: 0;
@@ -222,18 +217,18 @@ ul#history-list li span {
     
     .calculator {
         width: 100%;
-        grid-template-columns: repeat(4, 1fr); /* Lebar tombol fleksibel */
+        grid-template-columns: repeat(4, 1fr); 
         padding: 15px;
-        flex-grow: 1; /* Kalkulator memenuhi layar */
+        flex-grow: 1; 
     }
     
     .history-panel {
         width: 100%;
-        height: 200px; /* Tinggi tetap untuk history di HP */
+        height: 200px; 
         border-left: none;
         border-top: 2px solid #dfe6e9;
         padding: 15px;
-        order: 2; /* Pindah ke bawah */
+        order: 2; 
     }
 
     ul#history-list {
