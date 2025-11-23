@@ -57,4 +57,6 @@ Berbeda dengan kalkulator sederhana biasa, aplikasi ini menggunakan logika **Exp
 <img width="1858" height="922" alt="image" src="https://github.com/user-attachments/assets/b3ec2fec-c648-43d8-9822-cb3714e66384" />
 
 **Tampilan HP Responsive**
+
+
 <img width="349" height="788" alt="image" src="https://github.com/user-attachments/assets/10fca823-66c9-4516-8c1d-2a582fe73644" />
