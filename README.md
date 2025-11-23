@@ -48,15 +48,12 @@ Berbeda dengan kalkulator sederhana biasa, aplikasi ini menggunakan logika **Exp
 <img width="1899" height="919" alt="image" src="https://github.com/user-attachments/assets/d2d4344b-7462-4621-8b14-5b04ab4c13e0" />
 
 **Memory Dikurang**
-<img width="1897" height="919" alt="image" src="https://github.com/user-attachments/assets/f0fc6d77-2c9f-4ddd-8414-93a71eb10c87" />
-
-**Memmory Ditambah**
 <img width="1893" height="916" alt="image" src="https://github.com/user-attachments/assets/24533380-be18-4ff2-99d6-cdede7cdec4f" />
 
-**Memory Direset**
+**Memmory Ditambah**
 <img width="1888" height="918" alt="image" src="https://github.com/user-attachments/assets/429cba68-927b-4d2e-8022-9859ec7e992f" />
 
-
+**Memory Direset**
 <img width="1858" height="922" alt="image" src="https://github.com/user-attachments/assets/b3ec2fec-c648-43d8-9822-cb3714e66384" />
 
 **Tampilan HP Responsive**
